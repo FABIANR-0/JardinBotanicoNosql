@@ -2,6 +2,7 @@
 require_once "librerias/constantes.php";
 require_once "librerias/conexion.php";
 require_once "librerias/front_controller.php";
+require_once "vendor/autoload.php";
  
 if(isset($_SESSION['documento']))
 {

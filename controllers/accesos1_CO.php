@@ -2,6 +2,7 @@
 
 require_once "../models/accesos_MO.php";
 require_once "../librerias/conexion.php";
+require_once "../vendor/autoload.php";
 session_start();
 $conexion = new conexion();
 
@@ -50,12 +51,36 @@ if (!(filter_var($correo, FILTER_VALIDATE_EMAIL))) {
   }
   $accesos_MO=new accesos_MO($conexion);
  $arreglo=$accesos_MO->iniciarSesion($correo,$contrasena);
+ //$arreglo1=json_decode($arreglo);
+ 
   if($arreglo)
   { 
-      
-      $objeto_accesos=$arreglo[0];
-      $documento=$objeto_accesos->documento;
-      $_SESSION['documento']=$documento;
+   // exit($arreglo);
+   // print_r($arreglo)
+    // $documento=$arreglo->document;
+     //$_SESSION['documento']=$documento;
+    
+     //exit($arreglo);
+      //$documento="";
+       $b=true;
+      foreach ($arreglo as $document) {
+        
+        
+        if($document['email']==$correo and $document['password']==$contrasena){
+          $_SESSION['documento']=$document['Document']; 
+          $b=false;
+        }
+      }
+    
+     if($b==true){
+      $arreglo_respuesta = [
+        "estado" => "ERROR",
+        "mensaje" => "DATOS ERRONEOS pp"
+    
+      ];
+    
+      exit(json_encode($arreglo_respuesta));
+     }
       $arreglo_respuesta = [
       "estado" => "EXITO",
       "mensaje" => "LOGIN EXITOSO ",
@@ -68,9 +93,25 @@ if (!(filter_var($correo, FILTER_VALIDATE_EMAIL))) {
       $arregloen=$accesos_MO->iniciarSesionEn($correo,$contrasena);
       if($arregloen)
       {
-          $objeto_accesos=$arregloen[0];
-          $nit=$objeto_accesos->nit;
-          $_SESSION['nit']=$nit;
+        $b=true;
+        foreach ($arregloen as $document) {
+          
+          
+          if($document['email']==$correo and $document['password']==$contrasena){
+            $_SESSION['nit']=$document['nit']; 
+            $b=false;
+          }
+        }
+      
+       if($b==true){
+        $arreglo_respuesta = [
+          "estado" => "ERROR",
+          "mensaje" => "DATOS ERRONEOS pp"
+      
+        ];
+      
+        exit(json_encode($arreglo_respuesta));
+       }
           $arreglo_respuesta = [
             "estado" => "EXITO",
             "mensaje" => "LOGIN EXITOSO "

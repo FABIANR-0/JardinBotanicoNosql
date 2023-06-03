@@ -10,15 +10,18 @@ class accesos_MO
 
     function iniciarSesion($correo,$contrasena)
     {
-        $sql="select documento from coordinador where correo='$correo' and contrasena='$contrasena'";
-        $this->conexion->consultar($sql);
+        //$sql="select documento from coordinador where correo='$correo' and contrasena='$contrasena'";
+        $consult=array('email'=>$correo,'password'=>$contrasena);
+        $this->conexion->consultar($consult,"coordinators");
         return $this->conexion->extraerRegistro();
     }
     function iniciarSesionEn($correo,$contrasena)
     {
-        $sql="select nit from entidad where correo='$correo' and contrasena='$contrasena'";
-        $this->conexion->consultar($sql);
+        $consult=array('email'=>$correo,'password'=>$contrasena);
+        $this->conexion->consultar($consult,"entities");
         return $this->conexion->extraerRegistro();
+
+       
     }
 
 }

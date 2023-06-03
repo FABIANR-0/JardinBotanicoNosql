@@ -18,15 +18,15 @@ class plantas_CO
    
     $especie1 = htmlentities($_POST['especie'], ENT_QUOTES);
     $familia = htmlentities($_POST['familia'], ENT_QUOTES);
-    $cod_origen = htmlentities($_POST['cod_origen'], ENT_QUOTES);
-    $cod_estado = htmlentities($_POST['cod_estado'], ENT_QUOTES);
-    $cod_habito = htmlentities($_POST['cod_habito'], ENT_QUOTES);
+    $origen = htmlentities($_POST['cod_origen'], ENT_QUOTES);
+    $estado = htmlentities($_POST['cod_estado'], ENT_QUOTES);
+    $habito = htmlentities($_POST['cod_habito'], ENT_QUOTES);
     $nombre_comun = htmlentities($_POST['nombre_comun'], ENT_QUOTES);
     $stock = htmlentities($_POST['stock'], ENT_QUOTES);
     $caracteristica = htmlentities($_POST['caracteristica'], ENT_QUOTES);
     $especie=str_replace(' ','_',$especie1);
    
-    if ( empty($familia) or empty($caracteristica) or empty($especie1) or empty($cod_origen) or empty($cod_estado) or empty($cod_habito)or empty($nombre_comun)or empty($stock)) {
+    if ( empty($familia) or empty($caracteristica) or empty($especie1) or empty($origen) or empty($estado) or empty($habito)or empty($nombre_comun)or empty($stock)) {
       $arreglo_respuesta = [
         "estado" => "ERROR",
         "mensaje" => "Todos los campos son obligatorios"
@@ -75,16 +75,19 @@ class plantas_CO
       }
  
     $arreglo_plantas = $plantas_MO->seleccionar_planta($especie);
-    if ($arreglo_plantas) {
-      $arreglo_respuesta = [
-        "estado" => "ERROR",
-        "mensaje" => "El nombre de la especie ($especie) esta duplicado"
-
-      ];
-
-      exit(json_encode($arreglo_respuesta));
+    foreach($arreglo_plantas as $doc_plantas){
+      if ($especie==$doc_plantas['species']) {
+        $arreglo_respuesta = [
+          "estado" => "ERROR",
+          "mensaje" => "El nombre de la especie ($especie) esta duplicado"
+  
+        ];
+  
+        exit(json_encode($arreglo_respuesta));
+      }
     }
-    $plantas_MO->agregarplantas($especie,$familia,$cod_estado,$cod_habito,$cod_origen,$nombre_comun, $stock, $caracteristica);
+    
+    $plantas_MO->agregarplantas($especie,$familia,$estado,$habito,$origen,$nombre_comun, $stock, $caracteristica);
     /*$familia= $conexion->lastInsertId();*/
     $arreglo_respuesta = [
       "especie" => $especie,

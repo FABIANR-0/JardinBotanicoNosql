@@ -11,21 +11,22 @@ class plantas_VI
     {
 
         require_once "models/plantas_MO.php";
-        require_once "models/estados_MO.php";
+       /* require_once "models/estados_MO.php";
         require_once "models/familias_MO.php";
         require_once "models/habitos_MO.php";
-        require_once "models/origenes_MO.php";
+        require_once "models/origenes_MO.php";*/
         $conexion = new conexion();
         $plantas_MO = new plantas_MO($conexion);
-        $familias_MO = new familias_MO($conexion);
+        $arreglo_plantas = $plantas_MO->seleccionar(); 
+        /*$familias_MO = new familias_MO($conexion);
         $origenes_MO = new origenes_MO($conexion);
         $habitos_MO = new habitos_MO($conexion);
         $estados_MO = new estados_MO($conexion);
-        $arreglo_plantas = $plantas_MO->seleccionar();     
+           
         $arreglo_familias = $familias_MO->seleccionar();   
         $arreglo_origenes = $origenes_MO->seleccionar();  
         $arreglo_habitos = $habitos_MO->seleccionar();
-        $arreglo_estados = $estados_MO->seleccionar();
+        $arreglo_estados = $estados_MO->seleccionar();*/
 
 ?>
         
@@ -41,18 +42,30 @@ class plantas_VI
                         <div class="col-md-3">
                             <label for="familia">Nombre familia</label>
                             <select class="form-control" name="familia" id="familia">
-                                <option value=""></option>
+                               <option value=""></option>
+                               <option value="ACANTHACEAE">ACANTHACEAE</option>
+                               <option value="ACTINIDIACEAE">ACTINIDIACEAE</option>
+                               <option value="ADIANTACEAE">ADIANTACEAE</option>
+                               <option value="ADOXACEAE">ADOXACEAE</option>
+                               <option value="AGAVACEAE">AGAVACEAE</option>
+                               <option value="AMARYLLIDACEAE">AMARYLLIDACEAE</option>
+                               <option value="ANACARDIACEAE">ANACARDIACEAE</option>
+                               <option value="ANNONACEAE">ANNONACEAE</option>
+                               <option value="APOCYNACEAE">APOCYNACEAE</option>
+                               <option value="AQUIFOLIACEAE">AQUIFOLIACEAE</option>
+                               <option value="ARACEAE">ARACEAE</option>
+
                                 <?php
-                                if ($arreglo_familias) {
+                                /*if ($arreglo_familias) {
 
                                     foreach ($arreglo_familias as $objeto_familia) {
                                         $nombre_familia = $objeto_familia->nombre_familia;
 
                                 ?>
-                                        <option value="<?php echo $nombre_familia; ?>"><?php echo  $nombre_familia; ?></option>
+                                        
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
 
@@ -61,8 +74,13 @@ class plantas_VI
                             <label for="cod_origen">Nombre origen</label>
                             <select class="form-control" name="cod_origen" id="cod_origen">
                                 <option value=""></option>
+                                <option value="NO IDENTIFICADO">NO IDENTIFICADO</option>
+                                <option value="NATIVA">NATIVA</option>
+                                <option value="ENDEMICA">ENDEMICA</option>
+                                <option value="EXOTICA">EXOTICA</option>
+                                <option value="INTRODUCIDA">INTRODUCIDA</option>
                                 <?php
-                                if ($arreglo_origenes) {
+                                /*if ($arreglo_origenes) {
 
                                     foreach ($arreglo_origenes as $objeto_origen) {
                                         $cod_origen = $objeto_origen->cod_origen;
@@ -72,7 +90,7 @@ class plantas_VI
                                         <option value="<?php echo $cod_origen; ?>"><?php echo  $nombre_origen; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
 
@@ -81,8 +99,18 @@ class plantas_VI
                             <label for="cod_estado">Estado de conservacion</label>
                             <select class="form-control" name="cod_estado" id="cod_estado">
                                 <option value=""></option>
+                                <option value="NO EVALUADO">NO EVALUADO</option>
+                                <option value="EXTINTA">EXTINTA</option>
+                                <option value="EXTINTA EN ESTADO SILVESTRE">EXTINTA EN ESTADO SILVESTRE</option>
+                                <option value="EN PELIGRO CRITICO">EN PELIGRO CRITICO</option>
+                                <option value="EN PELIGRO">EN PELIGRO</option>
+                                <option value="VULNERABLE">VULNERABLE</option>
+                                <option value="	CASI AMENAZADA">CASI AMENAZADA</option>
+                                <option value="PREOCUPACION MENOR">PREOCUPACION MENOR</option>
+                                <option value="DATOS INSUFICIENTES">DATOS INSUFICIENTES</option>
+                                
                                 <?php
-                                if ($arreglo_estados) {
+                                /*if ($arreglo_estados) {
 
                                     foreach ($arreglo_estados as $objeto_estado) {
                                         $cod_estado = $objeto_estado->cod_estado;
@@ -92,7 +120,7 @@ class plantas_VI
                                         <option value="<?php echo $cod_estado; ?>"><?php echo  $nombre_estado; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
                         </div>
@@ -100,8 +128,13 @@ class plantas_VI
                             <label for="cod_habito">Habito de crecimiento</label>
                             <select class="form-control" name="cod_habito" id="cod_habito">
                                 <option value=""></option>
+                                <option value="NO IDENTIFICADO">NO IDENTIFICADO</option>
+                                <option value="ARBOL">ARBOL</option>
+                                <option value="ARBUSTO">ARBUSTO</option>
+                                <option value="HIERVA">HIERVA</option>
+                                <option value="EPIFITA">EPIFITA</option>
                                 <?php
-                                if ($arreglo_habitos) {
+                                /*if ($arreglo_habitos) {
 
                                     foreach ($arreglo_habitos as $objeto_habito) {
                                         $cod_habito = $objeto_habito->cod_habito;
@@ -111,7 +144,7 @@ class plantas_VI
                                         <option value="<?php echo $cod_habito; ?>"><?php echo  $nombre_habito; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
 
@@ -181,7 +214,7 @@ class plantas_VI
                             if ($arreglo_plantas) {
 
                                 foreach ($arreglo_plantas as $objeto_plantas) {
-                                    $cod_origen= $objeto_plantas->cod_origen;
+                                  /*  $cod_origen= $objeto_plantas->cod_origen;
                                     $cod_estado= $objeto_plantas->cod_estado;
                                     $cod_habito= $objeto_plantas->cod_habito;
     
@@ -199,7 +232,17 @@ class plantas_VI
                                     $especie1= str_replace('_',' ',$especie);
                                     $familia = $objeto_plantas->nombre_familia;
                                     $nombre_comun = $objeto_plantas->nombre_comun;
-                                    $stock = $objeto_plantas->stock;
+                                    $stock = $objeto_plantas->stock;*/
+
+                                    $especie=$objeto_plantas['species'];
+                                    $especie1= str_replace('_',' ',$especie);
+                                    $nombre_origen=$objeto_plantas['origin_name'];
+                                    $nombre_estado=$objeto_plantas['state_name'];
+                                    $nombre_habito=$objeto_plantas['habit_name'];
+                                    $nombre_comun=$objeto_plantas['common_name'];
+                                    $stock=$objeto_plantas['stock']; 
+                                    $familia=$objeto_plantas['families']['family_name']; 
+
                                    
                             ?>
                                     <tr>
@@ -243,14 +286,14 @@ class plantas_VI
            
             function agregarplantas() {
 
-                var dato_familia = document.getElementById("familia");
+                /*var dato_familia = document.getElementById("familia");
                 var familia = dato_familia.options[dato_familia.selectedIndex].text;
                 var dato_origen = document.getElementById("cod_origen");
                 var nombre_origen = dato_origen.options[dato_origen.selectedIndex].text;
                 var dato_estado = document.getElementById("cod_estado");
                 var nombre_estado1 = dato_estado.options[dato_estado.selectedIndex].text;
                 var dato_habito = document.getElementById("cod_habito");
-                var nombre_habito1 = dato_habito.options[dato_habito.selectedIndex].text;
+                var nombre_habito1 = dato_habito.options[dato_habito.selectedIndex].text;*/
 
                 var cadena = new FormData(document.querySelector('#formulario_agregar_plantas'));
 
@@ -264,32 +307,30 @@ class plantas_VI
                         let especie = especie1.replace(' ','_');
                         let stock = document.querySelector('#formulario_agregar_plantas #stock').value;
                         let nombre_comun = document.querySelector('#formulario_agregar_plantas #nombre_comun').value;
-                        let cod_origen = document.querySelector('#formulario_agregar_plantas #cod_origen').value;
-                        let cod_estado = document.querySelector('#formulario_agregar_plantas #cod_estado').value;
-                        let cod_habito = document.querySelector('#formulario_agregar_plantas #cod_habito').value;
-
+                        let origen = document.querySelector('#formulario_agregar_plantas #cod_origen').value;
+                        let estado = document.querySelector('#formulario_agregar_plantas #cod_estado').value;
+                        let habito = document.querySelector('#formulario_agregar_plantas #cod_habito').value;
+                        let familia = document.querySelector('#formulario_agregar_plantas #familia').value;
                         if (respuesta.estado == 'EXITO') {
              
                             let fila = `
                              <tr>
                                         <td id="especie_td_${especie}"> ${especie1} </td>
                                         <td id="familia_td_${especie}"> ${familia} </td>
-                                        <td id="nombre_origen_td_${especie}"> ${nombre_origen} </td>
-                                        <td id="nombre_estado_td_${especie}"> ${nombre_estado1} </td>
-                                        <td id="nombre_habito_td_${especie}"> ${nombre_habito1} </td>
+                                        <td id="nombre_origen_td_${especie}"> ${origen} </td>
+                                        <td id="nombre_estado_td_${especie}"> ${estado} </td>
+                                        <td id="nombre_habito_td_${especie}"> ${habito} </td>
                                         <td id="nombre_comun_td_${especie}"> ${nombre_comun} </td>
                                         <td id="stock_td_${especie}"> ${stock} </td>
                                         <td style="text-align: center;">
                                             <input type="hidden" id="especie_${especie}" value="${especie}">
                                             <input type="hidden" id="familia_${especie}" value="${familia}">
-                                            <input type="hidden" id="nombre_origen_${especie}" value="${nombre_origen}">
-                                            <input type="hidden" id="nombre_estado_${especie}" value="${nombre_estado1}">
-                                            <input type="hidden" id="nombre_habito_${especie}" value="${nombre_habito1}">
+                                            <input type="hidden" id="nombre_origen_${especie}" value="${origen}">
+                                            <input type="hidden" id="nombre_estado_${especie}" value="${estado}">
+                                            <input type="hidden" id="nombre_habito_${especie}" value="${habito}">
                                             <input type="hidden" id="nombre_comun_${especie}" value="${nombre_comun}">
                                             <input type="hidden" id="stock_${especie}" value="${stock}">
-                                            <input type="hidden" id="cod_origen${especie}" value="${cod_origen}">
-                                            <input type="hidden" id="cod_estado${especie}" value="${cod_estado}">
-                                            <input type="hidden" id="cod_habito${especie}" value="${cod_habito}">
+                                           
 
                                             <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal" style="cursor: pointer;" onclick="verActualizarplantas('${especie}')"></i>
                                         </td>
@@ -331,7 +372,7 @@ class plantas_VI
                             <select class="form-control" name="familia" id="familia">
                                 <option value="${familia}">${familia}</option>
                                 <?php
-                                if ($arreglo_familias) {
+                                /*if ($arreglo_familias) {
 
                                     foreach ($arreglo_familias as $objeto_familia) {
                                         $nombre_familia = $objeto_familia->nombre_familia;
@@ -340,7 +381,7 @@ class plantas_VI
                                         <option value="<?php echo $nombre_familia; ?>"><?php echo  $nombre_familia; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
 
@@ -350,7 +391,7 @@ class plantas_VI
                             <select class="form-control" name="cod_origen" id="cod_origen1">
                                 <option value="${codi_origen}">${nombre_origen}</option>
                                 <?php
-                                if ($arreglo_origenes) {
+                                /*if ($arreglo_origenes) {
 
                                     foreach ($arreglo_origenes as $objeto_origen) {
                                         $cod_origen = $objeto_origen->cod_origen;
@@ -361,7 +402,7 @@ class plantas_VI
                                         <option value="<?php echo $cod_origen; ?>"><?php echo  $nombre_origen; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
 
@@ -371,7 +412,7 @@ class plantas_VI
                             <select class="form-control" name="cod_estado" id="cod_estado1">
                                 <option value="${codi_estado}">${nombre_estado}</option>
                                 <?php
-                                if ($arreglo_estados) {
+                               /* if ($arreglo_estados) {
 
                                     foreach ($arreglo_estados as $objeto_estado) {
                                         $cod_estado = $objeto_estado->cod_estado;
@@ -381,7 +422,7 @@ class plantas_VI
                                         <option value="<?php echo $cod_estado; ?>"><?php echo  $nombre_estado; ?></option>
                                 <?php
                                     }
-                                }
+                                }*/
                                 ?>
                             </select>
                         </div>
@@ -390,7 +431,7 @@ class plantas_VI
                             <select class="form-control" name="cod_habito" id="cod_habito1">
                                 <option value="${codi_habito}">${nombre_habito}</option>
                                 <?php
-                                if ($arreglo_habitos) {
+                                /*if ($arreglo_habitos) {
 
                                     foreach ($arreglo_habitos as $objeto_habito) {
                                         $cod_habito = $objeto_habito->cod_habito;
@@ -401,6 +442,7 @@ class plantas_VI
                                 <?php
                                     }
                                 }
+                                */
                                 ?>
                             </select>
 

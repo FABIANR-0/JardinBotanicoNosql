@@ -8,12 +8,13 @@ class plantas_MO
     $this->conexion = $conexion;
   }
 
-  function agregarplantas($especie,$familia,$cod_estado,$cod_habito,$cod_origen,$nombre_comun, $stock, $caracteristica)
+  function agregarplantas($especie,$familia,$estado,$habito,$origen,$nombre_comun, $stock, $caracteristica)
   {
 
-    $sql = "insert into planta (especie,nombre_familia,cod_estado,cod_habito,cod_origen,nombre_comun, stock, caracteristicas) values ('$especie','$familia','$cod_estado','$cod_habito','$cod_origen','$nombre_comun',$stock,'$caracteristica' )";
+    $Nsql=array('species'=>$especie,'common_name'=>$nombre_comun,'origin_name'=>$origen,'state_name'=>$estado,'habit_name'=>$habito,'characteristics'=>$caracteristica,'stock'=>(int)$stock,'families'=>array('family_name'=>$familia));
+    //$sql = "insert into planta (especie,nombre_familia,cod_estado,cod_habito,cod_origen,nombre_comun, stock, caracteristicas) values ('$especie','$familia','$cod_estado','$cod_habito','$cod_origen','$nombre_comun',$stock,'$caracteristica' )";
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultarIns($Nsql,"plants");
   }
   function actualizarplantas($especie,$familia,$cod_estado,$cod_habito,$cod_origen,$nombre_comun, $stock)
   {
@@ -28,13 +29,13 @@ class plantas_MO
 
     if (empty($especie)) {
 
-      $sql = "select * from planta";
+      $Nsql = array();
     } else {
 
-      $sql = "select * from planta where especie='$especie'";
+      $Nsql = array('species'=>$especie);
     }
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"plants");
 
     $arreglo = $this->conexion->extraerRegistro();
 
@@ -44,13 +45,13 @@ class plantas_MO
   {
     if ($especie) {
 
-      $sql = "select * from planta where especie='$especie'";
+      $Nsql = array('species'=>$especie);
     } else {
 
-      $sql = "select * from planta";
+      $Nsql = array();
     }
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"plants");
 
     $arreglo = $this->conexion->extraerRegistro();
 

@@ -12,14 +12,17 @@ class actCoordinador_VI
         $conexion=new conexion();
         $coordinador_MO=new coordinador_MO($conexion);
         $arreglo=$coordinador_MO->seleccionar($_SESSION['documento']);
+        
+        foreach ($arreglo as $document) {
 
-        $objeto_coordinador=$arreglo[0];
-        $nombres=$objeto_coordinador->nombres;
-        $apellidos=$objeto_coordinador->apellidos;
-        $telefono=$objeto_coordinador->telefono;
-        $correo=$objeto_coordinador->correo;
-        $contrasena=$objeto_coordinador->contrasena;
-        $documento=$objeto_coordinador->documento;
+          $nombres=$document['first_name'];
+          $apellidos=$document['last_name'];
+          $telefono=$document['cellphone'];
+          $correo=$document['email'];
+          $contrasena=$document['password'];
+          $documento=$document['Document'];
+
+        }
 
 ?>
         <div class="card">

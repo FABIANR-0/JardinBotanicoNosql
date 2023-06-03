@@ -15,13 +15,13 @@ class coordinador_MO
 
     if (empty($documento)) {
 
-      $sql = "select * from coordinador";
+      $Nsql = array();
     } else {
 
-      $sql = "select * from coordinador where documento='$documento'";
+      $Nsql = array('Document'=>$documento);
     }
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"coordinators");
 
     $arreglo = $this->conexion->extraerRegistro();
 
@@ -30,9 +30,16 @@ class coordinador_MO
   function actualizarcoordinador($documento,$nombres,$apellidos,$telefono,$correo,$contrasena)
   {
 
+    $Nsql= array('Document'=>$documento);
+    $update=array('$set'=>array('first_name'=>$nombres,'last_name'=>$apellidos,'cellphone'=>$telefono,'email'=>$correo,'password'=>$contrasena));
+    
     $sql = "update coordinador set nombres='$nombres', apellidos='$apellidos',telefono='$telefono',correo='$correo',contrasena='$contrasena'  where documento='$documento'";
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultarAct($Nsql,$update,"coordinators");
+    
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
   }
  
 }

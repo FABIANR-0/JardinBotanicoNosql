@@ -62,16 +62,16 @@ class entidad_MO
 
   function seleccionar($nit= '')
   {
-
+    
     if (empty($nit)) {
 
-      $sql = "select * from entidad";
+      $Nsql = array();
     } else {
 
-      $sql = "select * from entidad where nit='$nit'";
+      $Nsql = array('nit'=>$nit);
     }
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"entities");
 
     $arreglo = $this->conexion->extraerRegistro();
 
