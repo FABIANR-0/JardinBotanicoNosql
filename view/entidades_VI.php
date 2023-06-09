@@ -99,11 +99,11 @@ class entidades_VI
 
                             foreach ($arreglo_entidad as $objeto_entidad) {
 
-                                $nit = $objeto_entidad->nit;
-                                $nombre = $objeto_entidad->nombre_entidad;
-                                $tipo = $objeto_entidad->tipo_entidad;
-                                $telefono = $objeto_entidad->telefono;
-                                $correo = $objeto_entidad->correo;
+                                $nit = $objeto_entidad['nit'];
+                                $nombre = $objeto_entidad['entity_name'];
+                                $tipo = $objeto_entidad['entity_type'];
+                                $telefono = $objeto_entidad['cellphone'];
+                                $correo = $objeto_entidad['email'];
                         ?>
                                 <tr>
                                     <td id="nit_td_<?php echo $nit; ?>"> <?php echo $nit; ?> </td>

@@ -10,40 +10,51 @@ class entidad_MO
 
   function agregarentidades($nit,$nombre,$tipo,$telefono,$correo,$contrasena)
   {
+    $Nsql=array('nit'=>$nit,'entity_name'=>$nombre,'entity_type'=>$tipo,'cellphone'=>$telefono,'email'=>$correo,'password'=>$contrasena);
 
-    $sql = "insert into entidad(nit,nombre_entidad,tipo_entidad,telefono,correo,contrasena, tipo_usuario) values ('$nit','$nombre','$tipo','$telefono','$correo','$contrasena','2')";
+    $this->conexion->consultarIns($Nsql,"entities");
 
-    $this->conexion->consultar($sql);
+
   }
   function actualizarentidades($nit,$nombre,$tipo,$telefono,$correo)
   {
+    $Nsql= array('nit'=>$nit);
 
-    $sql = "update entidad set nombre_entidad='$nombre', tipo_entidad='$tipo',telefono='$telefono',correo='$correo' where nit='$nit'";
+    $update=array('$set'=>array('entity_name'=>$nombre,'entity_type'=>$tipo,'cellphone'=>$telefono,'email'=>$correo ));
+    
+    $this->conexion->consultarAct($Nsql,$update,"entities");
 
-    $this->conexion->consultar($sql);
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
+
+     
   }
   function actualizarentidad($nit,$nombre,$tipo,$telefono,$correo,$contrasena)
   {
+    $Nsql= array('nit'=>$nit);
 
-    $sql = "update entidad set nombre_entidad='$nombre', tipo_entidad='$tipo',telefono='$telefono',correo='$correo',contrasena='$contrasena' where nit='$nit'";
+    $update=array('$set'=>array('entity_name'=>$nombre,'entity_type'=>$tipo,'cellphone'=>$telefono,'email'=>$correo,'password'=>$contrasena));
+    
+    $this->conexion->consultarAct($Nsql,$update,"entities");
 
-    $this->conexion->consultar($sql);
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
   }
   function seleccionar_entidadem($correo){
-
-    $sql = "select * from entidad where correo='$correo'";
-    
-    $this->conexion->consultar($sql);
+    $Nsql = array('email'=>$correo);
+  
+    $this->conexion->consultar($Nsql,"entities");
 
     $arreglo = $this->conexion->extraerRegistro();
 
     return $arreglo;
   }
   function seleccionar_entidadnom($nombre){
-
-    $sql = "select * from entidad where nombre_entidad='$nombre'";
-    
-    $this->conexion->consultar($sql);
+    $Nsql = array('entity_name'=>$nombre);
+  
+    $this->conexion->consultar($Nsql,"entities");
 
     $arreglo = $this->conexion->extraerRegistro();
 
@@ -51,9 +62,9 @@ class entidad_MO
   }
   function seleccionar_entidadte($telefono){
 
-    $sql = "select * from entidad where telefono='$telefono'";
-    
-    $this->conexion->consultar($sql);
+    $Nsql = array('cellphone'=>$telefono);
+  
+    $this->conexion->consultar($Nsql,"entities");
 
     $arreglo = $this->conexion->extraerRegistro();
 
@@ -81,13 +92,13 @@ class entidad_MO
   {
     if ($nit) {
 
-      $sql = "select * from entidad where nit='$nit'";
+      $Nsql = array('nit'=>$nit);
     } else {
 
-      $sql = "select * from entidad";
+      $Nsql = array();
     }
 
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"entities");
 
     $arreglo = $this->conexion->extraerRegistro();
 

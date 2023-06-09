@@ -55,13 +55,7 @@ if (!(filter_var($correo, FILTER_VALIDATE_EMAIL))) {
  
   if($arreglo)
   { 
-   // exit($arreglo);
-   // print_r($arreglo)
-    // $documento=$arreglo->document;
-     //$_SESSION['documento']=$documento;
-    
-     //exit($arreglo);
-      //$documento="";
+   
        $b=true;
       foreach ($arreglo as $document) {
         
@@ -73,40 +67,22 @@ if (!(filter_var($correo, FILTER_VALIDATE_EMAIL))) {
       }
     
      if($b==true){
-      $arreglo_respuesta = [
-        "estado" => "ERROR",
-        "mensaje" => "DATOS ERRONEOS pp"
-    
-      ];
-    
-      exit(json_encode($arreglo_respuesta));
-     }
-      $arreglo_respuesta = [
-      "estado" => "EXITO",
-      "mensaje" => "LOGIN EXITOSO ",
-    
-    ];
-     
-    exit(json_encode($arreglo_respuesta));
-
-  }else{
       $arregloen=$accesos_MO->iniciarSesionEn($correo,$contrasena);
       if($arregloen)
       {
-        $b=true;
+        $c=true;
         foreach ($arregloen as $document) {
-          
           
           if($document['email']==$correo and $document['password']==$contrasena){
             $_SESSION['nit']=$document['nit']; 
-            $b=false;
+            $c=false;
           }
         }
       
-       if($b==true){
+       if($c==true){
         $arreglo_respuesta = [
           "estado" => "ERROR",
-          "mensaje" => "DATOS ERRONEOS pp"
+          "mensaje" => "DATOS ERRONEOS nn"
       
         ];
       
@@ -128,6 +104,18 @@ if (!(filter_var($correo, FILTER_VALIDATE_EMAIL))) {
         
           exit(json_encode($arreglo_respuesta));
       }
+       
+     }
+      $arreglo_respuesta = [
+      "estado" => "EXITO",
+      "mensaje" => "LOGIN EXITOSO ",
+    
+    ];
+     
+    exit(json_encode($arreglo_respuesta));
+
+  }else{
+     
   }
 
 ?>

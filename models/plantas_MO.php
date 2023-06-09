@@ -16,12 +16,19 @@ class plantas_MO
 
     $this->conexion->consultarIns($Nsql,"plants");
   }
-  function actualizarplantas($especie,$familia,$cod_estado,$cod_habito,$cod_origen,$nombre_comun, $stock)
+  function actualizarplantas($especie,$familia,$estado,$habito,$origen,$nombre_comun, $stock)
   {
 
-    $sql = "update planta set nombre_familia='$familia', cod_estado='$cod_estado',cod_habito='$cod_habito',cod_origen='$cod_origen',nombre_comun='$nombre_comun', stock='$stock'  where especie='$especie'";
+    $Nsql= array('species'=>$especie);
 
-    $this->conexion->consultar($sql);
+    $update=array('$set'=>array('common_name'=>$nombre_comun,'origin_name'=>$origen,'state_name'=>$estado,'habit_name'=>$habito,'stock'=>(int)$stock,'families'=>array('family_name'=>$familia)));
+    
+    $this->conexion->consultarAct($Nsql,$update,"plants");
+
+
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
   }
 
   function seleccionar($especie = '')

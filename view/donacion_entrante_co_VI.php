@@ -18,10 +18,10 @@ class donacion_entrante_co_VI
         $donacion_en_MO = new donacion_saliente_en_MO($conexion);
         $arreglo_donacion= $donacion_en_MO->seleccionardc($_SESSION['documento']);
         $entidad_MO = new entidad_MO($conexion);
-        $arreglo_entidad= $entidad_MO->seleccionar();
+       /* $arreglo_entidad= $entidad_MO->seleccionar();
         $planta_MO = new plantas_MO($conexion);
         $arreglo_plantas= $planta_MO->seleccionar();
-        //print_r($arreglo_donacion);
+        //print_r($arreglo_donacion);*/
 ?>
          
  
@@ -50,14 +50,17 @@ class donacion_entrante_co_VI
 
                             foreach ($arreglo_donacion as $objeto_donacion) {
                                 
-                                $nit = $objeto_donacion->nit;
+                                $nit = $objeto_donacion['entity'];
                                 $arreglo_entidad = $entidad_MO->seleccionar($nit);
-                                $nombre = $arreglo_entidad[0]->nombre_entidad;
+                                foreach ($arreglo_entidad as $objeto_enti) {
+                                    $nombre = $objeto_enti['entity_name'];
+                                }
                                 
-                                $num = $objeto_donacion->id_donacion;
-                                $fecha = $objeto_donacion->fecha;
-                                $total = $objeto_donacion->total_plantas;
-                                $estado= $objeto_donacion->estado;
+                                $num = $objeto_donacion['number'];
+                                $fecha = $objeto_donacion['date'];
+                                $total = $objeto_donacion['total_plants'];
+                                $estado= $objeto_donacion['state'];
+                                $dateTime = $fecha->toDateTime();
                                
                         ?>
                                 <tr><?php if($estado=='3'){ ?>
@@ -72,7 +75,7 @@ class donacion_entrante_co_VI
                                     }?>
                                     <td id="nombre_td_<?php echo $num; ?>"> <?php echo $nit; ?> </td>
                                     <td id="nombre_td_<?php echo $num; ?>"> <?php echo $nombre; ?> </td>
-                                    <td id="fecha_td_<?php echo $num; ?>"> <?php echo $fecha; ?> </td>
+                                    <td id="fecha_td_<?php echo $num; ?>"> <?php echo  date_format($dateTime,'Y-m-d'); ?> </td>
                                     <td id="total_td_<?php echo $num; ?>"> <?php echo $total; ?> </td>
                                     <td style="text-align: center;"> 
                                     <i class="fa fa-check-circle"  style="cursor: pointer;" onclick="aceptar_solicitud('<?php echo $num; ?>' )"></i>
@@ -100,8 +103,12 @@ class donacion_entrante_co_VI
 
             </div>
         </div>
-        <?php foreach($arreglo_donacion as $obj_don){ ?>
-        <div  class="modal fade" id="nueva_<?php echo $obj_don->id_donacion; ?>" tabindex="-1" aria-labelledby="titulo" aria-hidden="true">
+        <?php 
+        $arreglo_donacion= $donacion_en_MO->seleccionardc($_SESSION['documento']);
+        foreach($arreglo_donacion as $obj_don){
+            $fecha = $obj_don['date'];
+            $dateTime = $fecha->toDateTime(); ?>
+        <div  class="modal fade" id="nueva_<?php echo $obj_don['number']; ?>" tabindex="-1" aria-labelledby="titulo" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -112,20 +119,20 @@ class donacion_entrante_co_VI
                             </div>
                             <div class="modal-body" id="otro_contenido_modal">
                             <div class="col-md-9">
-                            <p>N° Donacion: <?php echo $obj_don->id_donacion; ?> </P>
+                            <p>N° Donacion: <?php echo $obj_don['number']; ?> </P>
                             </div>
                             <div >
-                                <p>Fecha: <?php echo $obj_don->fecha; ?> </P>
+                                <p>Fecha: <?php echo  date_format($dateTime,'Y-m-d'); ?> </P>
                             </div>
                             <div class="col-md-9">
                             <?php 
-                            if($obj_don->estado==1){?>
+                            if($obj_don['state']==1){?>
                             <p>Estado: Pendiente</P>
                             <?php 
-                            }else if($obj_don->estado==2){?>
+                            }else if($obj_don['state']==2){?>
                                 <p>Estado: Aprobada</P>
                             <?php 
-                            }else if($obj_don->estado==3){?>
+                            }else if($obj_don['state']==3){?>
                                 <p>Estado: Rechazada</P>
                             <?php 
                             }
@@ -146,18 +153,17 @@ class donacion_entrante_co_VI
                                     </thead>
                                     <tbody id="listar_entidad">
                                         <?php  
-                                            $detalle = new detalle_saliente_en_MO($conexion);
-                                            $arreglo_detalle= $detalle->seleccionar_detalle($obj_don->id_donacion);
+                                            /*$detalle = new detalle_saliente_en_MO($conexion);
+                                            $arreglo_detalle= $detalle->seleccionar_detalle($obj_don->id_donacion);*/
                                             //print_r($arreglo_detalle);
-                                            foreach ($arreglo_detalle as $objeto_detalle) {
-                                                $id_detalle = $objeto_detalle->id_detalle_donacion;
-                                                $id_donacion = $objeto_detalle->id_donacion;
-                                                $planta = $objeto_detalle->especie;
-                                                $total= $objeto_detalle->cantidad;?>
+                                            foreach ($obj_don['detail_incoming_donations'] as $objeto_detalle) {
+                                                $id_detalle = $objeto_detalle['number'];
+                                                $planta = $objeto_detalle['species'];
+                                                $total= $objeto_detalle['amount_plants'];?>
                                         <tr>
-                                            <td id="detalle_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
-                                            <td id="planta_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
-                                            <td style="text-align: center;" id="total_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
+                                            <td id="detalle_td_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
+                                            <td id="planta_td_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
+                                            <td style="text-align: center;" id="total_td_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
                                            
                                         </tr>
                                         <?php 

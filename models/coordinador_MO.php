@@ -33,7 +33,6 @@ class coordinador_MO
     $Nsql= array('Document'=>$documento);
     $update=array('$set'=>array('first_name'=>$nombres,'last_name'=>$apellidos,'cellphone'=>$telefono,'email'=>$correo,'password'=>$contrasena));
     
-    $sql = "update coordinador set nombres='$nombres', apellidos='$apellidos',telefono='$telefono',correo='$correo',contrasena='$contrasena'  where documento='$documento'";
 
     $this->conexion->consultarAct($Nsql,$update,"coordinators");
     

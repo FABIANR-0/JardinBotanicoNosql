@@ -10,10 +10,20 @@ class detalle_saliente_en_MO
 
   function agregardetalle($id_donacion , $id_detalle,$especie,$catidad)
   {
+    $Nsql= array('number'=>(int)$id_donacion);
+     
+    $val=$id_detalle-1;
+    
+    $update=array('$set'=>array("detail_incoming_donations.$val.amount_plants"=>(int)$catidad,"detail_incoming_donations.$val.species"=>$especie,"detail_incoming_donations.$val.number"=>(int)$id_detalle),'$inc'=>array('total_plants'=>(int)$catidad));
+    $update1=array('$pull'=>array('detail_incoming_donations'=>array('$in'=> [null])));
+    
+   
+    $this->conexion->consultarAct($Nsql,$update,"donations");
+    $this->conexion->consultarAct($Nsql,$update1,"donations");
+    $arreglo = $this->conexion->extraerRegistro();
 
-    $sql = "insert into detalle_donacion_entrante(id_donacion,id_detalle_donacion,especie,cantidad) values ($id_donacion,'$id_detalle','$especie',$catidad)";
-
-    $this->conexion->consultar($sql);
+    return $arreglo;
+    
   }
   
  
@@ -23,10 +33,19 @@ class detalle_saliente_en_MO
     $this->conexion->consultar($sql);
   }
 
-  function eliminardetalle($id_donacion,$id_detalle){
-    $sql = "delete from detalle_donacion_entrante where id_donacion=$id_donacion and id_detalle_donacion='$id_detalle'";
+  function eliminardetalle($id_donacion,$id_detalle,$cantidad){
+    $val=$id_detalle-1;
+    $Nsql= array('number'=>(int)$id_donacion);
     
-    $this->conexion->consultar($sql);
+
+    $update=array('$unset'=>array("detail_incoming_donations.$val"=>1),'$inc'=>array('total_plants'=>-(int)$cantidad));
+    $update1=array('$pull'=>array('detail_incoming_donations'=>array('$in'=> [null])));
+    
+    $this->conexion->consultarAct($Nsql,$update,"donations");
+    $this->conexion->consultarAct($Nsql,$update1,"donations");
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
   }
 
   function eliminardonacion($id_donacion){
@@ -54,9 +73,9 @@ class detalle_saliente_en_MO
     $this->conexion->consultar($sql);
   }
   function consulplan($id_donacion,$id_detalle,$especie){
-    $sql = "select * from detalle_donacion_entrante where id_donacion=$id_donacion  and especie='$especie'";
+    $Nsql = array('number'=>(int)$id_donacion);
     
-    $this->conexion->consultar($sql);
+    $this->conexion->consultar($Nsql,"donations");
 
     $arreglo = $this->conexion->extraerRegistro();
 

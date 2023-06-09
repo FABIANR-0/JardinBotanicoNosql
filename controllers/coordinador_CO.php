@@ -84,7 +84,7 @@ class coordinador_CO
       }
       
 
-    $coordinador_MO->actualizarcoordinador($documento,$nombres,$apellidos,$telefono,$correo,$contrasena);
+    //$coordinador_MO->actualizarcoordinador($documento,$nombres,$apellidos,$telefono,$correo,$contrasena);
 
     $actualizado =  $coordinador_MO->actualizarcoordinador($documento,$nombres,$apellidos,$telefono,$correo,$contrasena);
     //$conexion->filasAfectadas();

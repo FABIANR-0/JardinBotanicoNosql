@@ -17,16 +17,20 @@ class donacion_saliente_en_VI
         $conexion = new conexion();
         $donacion_en_MO = new donacion_saliente_en_MO($conexion);
         $arreglo_donacion= $donacion_en_MO->seleccionar($_SESSION['nit']);
-        $max_val= $donacion_en_MO->seleccionarMax();
+       $arreglo_donacion2= $donacion_en_MO->seleccionar($_SESSION['nit']);
+        $arreglo_donacion1= $donacion_en_MO->seleccionar();
+
+        //$max_val= $donacion_en_MO->seleccionarMax();
         //print_r($max_val);
-        foreach($max_val as $valor){
-            $max_valor=$valor->mayor;
+        foreach($arreglo_donacion1 as $valor){
+            $max_valor=$valor['number'];
         }
         
         $coordinador_MO = new coordinador_MO($conexion);
         $arreglo_coordinador= $coordinador_MO->seleccionar();
         $planta_MO = new plantas_MO($conexion);
         $arreglo_plantas= $planta_MO->seleccionar();
+        $arreglo_plantas1= $planta_MO->seleccionar();
        // print_r($arreglo_donacion);
 ?>
         <div  class="card">
@@ -62,8 +66,11 @@ class donacion_saliente_en_VI
                 </form>
             </div>
         </div>
-        <?php foreach($arreglo_donacion as $obj_don){ ?>
-        <div  class="modal fade" id="nueva_<?php echo $obj_don->id_donacion; ?>" tabindex="-1" aria-labelledby="titulo" aria-hidden="true">
+        <?php foreach($arreglo_donacion2 as $objeto_donacion){ 
+            $fecha = $objeto_donacion['date'];
+            $dateTime = $fecha->toDateTime();
+            ?>
+        <div  class="modal fade" id="nueva_<?php echo $objeto_donacion['number']; ?>" tabindex="-1" aria-labelledby="titulo" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -74,27 +81,27 @@ class donacion_saliente_en_VI
                             </div>
                             <div class="modal-body" id="otro_contenido_modal">
                             <div class="col-md-9">
-                            <p>N° Donacion: <?php echo $obj_don->id_donacion; ?> </P>
+                            <p>N° Donacion: <?php echo $objeto_donacion['number']; ?> </P>
                             </div>
                             <div >
-                                <p>Fecha: <?php echo $obj_don->fecha; ?> </P>
+                                <p>Fecha: <?php echo date_format($dateTime,'Y-m-d'); ?> </P>
                             </div>
                             <div class="col-md-9">
                             <?php 
-                            if($obj_don->estado==1){?>
+                            if($objeto_donacion['state']==1){?>
                             <p>Estado: Pendiente</P>
                             <?php 
-                            }else if($obj_don->estado==2){?>
+                            }else if($objeto_donacion['state']==2){?>
                                 <p>Estado: Aprobada</P>
                             <?php 
-                            }else if($obj_don->estado==3){?>
+                            }else if($objeto_donacion['state']==3){?>
                                 <p>Estado: Rechazada</P>
                             <?php 
                             }
                                  ?>
                             </div>
                             <div >
-                                <p>Lugar: UFPSO?> </P>
+                                <p>Lugar: UFPSO </P>
                             </div>
 
                             <table class="table table-bordered table-sm table-hover">
@@ -104,12 +111,12 @@ class donacion_saliente_en_VI
                                             <th scope="col">Especie</th>
                                             <th style="text-align: center;">cantidad</th>
                                             <?php 
-                                            $fechas = explode("-", $obj_don->fecha);
+                                            $fechas = explode("-",  date_format($dateTime,'Y-m-d'));
                                             date_default_timezone_set('UTC');
                                             date_default_timezone_set("America/Bogota");
                                             $fecha1 = date('Y-m-d');
                                             $fechas1 = explode("-", $fecha1);
-                                              if($obj_don->estado!=1 or $fechas1[0]-$fechas[0]>=1 or $fechas1[1]-$fechas[1]>=1 or $fechas1[2]-$fechas[2]>2){
+                                              if($objeto_donacion['state']!=1 or $fechas1[0]-$fechas[0]>=1 or $fechas1[1]-$fechas[1]>=1 or $fechas1[2]-$fechas[2]>2){
 
                                               }
                                               else{
@@ -121,25 +128,21 @@ class donacion_saliente_en_VI
                                     </thead>
                                     <tbody id="listar_entidad">
                                         <?php  
-                                            $detalle = new detalle_saliente_en_MO($conexion);
-                                            $arreglo_detalle= $detalle->seleccionar_detalle($obj_don->id_donacion);
-                                            //print_r($arreglo_detalle);
-                                            foreach ($arreglo_detalle as $objeto_detalle) {
-                                                $id_detalle = $objeto_detalle->id_detalle_donacion;
-                                                $id_donacion = $objeto_detalle->id_donacion;
-                                                $planta = $objeto_detalle->especie;
-                                                $total= $objeto_detalle->cantidad;?>
+                                        foreach ($objeto_donacion['detail_incoming_donations'] as $objeto_detalle) {
+                                            $id_detalle = $objeto_detalle['number'];
+                                            $planta = $objeto_detalle['species'];
+                                            $total= $objeto_detalle['amount_plants'];?>
                                         <tr>
-                                            <td id="detalle_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
-                                            <td id="planta_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
-                                            <td style="text-align: center;" id="total_td_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
+                                            <td id="detalle_td_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
+                                            <td id="planta_td_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
+                                            <td style="text-align: center;" id="total_td_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
                                             <?php 
-                                              if($obj_don->estado!=1 or $fechas1[0]-$fechas[0]>=1 or $fechas1[1]-$fechas[1]>=1 or $fechas1[2]-$fechas[2]>2){
+                                              if($objeto_donacion['state']!=1 or $fechas1[0]-$fechas[0]>=1 or $fechas1[1]-$fechas[1]>=1 or $fechas1[2]-$fechas[2]>2){
 
                                               }else{?>
                                             <td style="text-align: center;">
-                                                <input type="hidden" id="especie_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>" value="<?php echo $planta; ?>">
-                                                <input type="hidden" id="total_<?php echo $id_donacion; ?>_<?php echo $id_detalle; ?>" value="<?php echo $total; ?>">
+                                                <input type="hidden" id="especie_<?php echo $id_detalle; ?>" value="<?php echo $planta; ?>">
+                                                <input type="hidden" id="total_<?php echo $id_detalle; ?>" value="<?php echo $total; ?>">
                                                 <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal"   style="cursor: pointer;" onclick="verActualizardetalle('<?php echo $id_detalle; ?>','<?php echo $id_donacion; ?>')"></i>
                                             </td>
                                             <?php 
@@ -180,10 +183,10 @@ class donacion_saliente_en_VI
                             <select   class="form-control" name="planta" id="planta">
                                 <option value="">seleccione</option>
                                 <?php
-                                if ($arreglo_plantas) {
+                                if ($arreglo_plantas1) {
 
-                                    foreach ($arreglo_plantas as $objeto_plantas) {
-                                        $especie = $objeto_plantas->especie;
+                                    foreach ($arreglo_plantas1 as $objeto_plantas) {
+                                        $especie = $objeto_plantas['species'];
                                         
 
                                 ?>
@@ -262,17 +265,21 @@ class donacion_saliente_en_VI
 
                             foreach ($arreglo_donacion as $objeto_donacion) {
                                 
-                                $documento = $objeto_donacion->documento;
+                                $documento = $objeto_donacion['coordinator'];
 
                                 
 
                                 $arreglo_coordinador = $coordinador_MO->seleccionar($documento);
-                                $nombre = $arreglo_coordinador[0]->nombres;
+                                foreach($arreglo_coordinador as $obj_coordinador){
+                                    $nombre = $obj_coordinador['first_name'];
+                                }
                                 
-                                $num = $objeto_donacion->id_donacion;
-                                $fecha = $objeto_donacion->fecha;
-                                $total = $objeto_donacion->total_plantas;
-                                $estado= $objeto_donacion->estado;
+                                
+                                $num = $objeto_donacion['number'];
+                                $fecha = $objeto_donacion['date'];
+                                $dateTime = $fecha->toDateTime();
+                                $total = $objeto_donacion['total_plants'];
+                                $estado= $objeto_donacion['state'];
                                
                         ?>
                                 <tr ><?php if($estado=='3'){ ?>
@@ -287,21 +294,21 @@ class donacion_saliente_en_VI
                                     }?>
                                     
                                     <td id="nombre_td_<?php echo $num; ?>"> <?php echo $nombre; ?> </td>
-                                    <td id="fecha_td_<?php echo $num; ?>"> <?php echo $fecha; ?> </td>
+                                    <td id="fecha_td_<?php echo $num; ?>"> <?php echo date_format($dateTime,'Y-m-d'); ?> </td>
                                     
                                     <td style="text-align: center;" id="total_td_<?php echo $num; ?>"> <?php echo $total; ?> </td>
                                     <td  style="text-align: center;">
                                         <input type="hidden" id="id_<?php echo $num; ?>" value="<?php echo $num; ?>">
                                         <input type="hidden" id="nombre_<?php echo $num; ?>" value="<?php echo $nombre; ?>">
-                                        <input type="hidden" id="fehca_<?php echo $num; ?>" value="<?php echo $fecha; ?>">
+                                        <input type="hidden" id="fehca_<?php echo $num; ?>" value="<?php echo date_format($dateTime,'Y-m-d');?>">
                                          
                                         <input type="hidden" id="total_<?php echo $num; ?>" value="<?php echo $total; ?>">
                                          
                                         <input type="hidden" id="documento_<?php echo $num; ?>" value="<?php echo $documento; ?>">
 
                                         <i class="fa fa-eye"   style="cursor: pointer;" data-toggle="modal" data-target="#nueva_<?php echo $num; ?>"></i>
-                                        <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal" style="cursor: pointer;" onclick="verActualizardonacion('<?php echo $num; ?>','<?php echo $fecha; ?>','<?php echo $estado; ?>')"></i>
-                                        <i class="fa fa-trash"   style="cursor: pointer;" onclick="verEliminarDonacion('<?php echo $num; ?>','<?php echo $fecha; ?>','<?php echo $estado; ?>',this)"></i>
+                                        <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal" style="cursor: pointer;" onclick="verActualizardonacion('<?php echo $num; ?>','<?php echo date_format($dateTime,'Y-m-d'); ?>','<?php echo $estado; ?>')"></i>
+                                        <i class="fa fa-trash"   style="cursor: pointer;" onclick="verEliminarDonacion('<?php echo $num; ?>','<?php echo date_format($dateTime,'Y-m-d'); ?>','<?php echo $estado; ?>',this)"></i>
 
                                     </td>
                                 </tr>
@@ -426,7 +433,9 @@ class donacion_saliente_en_VI
                 let arrf1= fechareal.split('-');
                 let arrf2= fecha.split('-');
 
-                if(arrf1[0]-arrf2[0]>=1 || arrf1[1]-arrf2[1]>=1 || arrf1[2]-arrf2[2]>2 || estado!='1'){
+                console.log(arrf1);
+                console.log(arrf2);
+                if(arrf1[0]-arrf2[0]>=1 || arrf1[1]-arrf2[1]>=1 || arrf1[2]-arrf2[2]>2 || estado!=1 ){
                     Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -521,7 +530,7 @@ class donacion_saliente_en_VI
                                 'success'
                                 )
                                 e.closest("tr").remove();
-                                
+                               
                             } else if (respuesta.estado = 'ERROR') {
 
                                 Swal.fire(
@@ -647,7 +656,7 @@ class donacion_saliente_en_VI
                                 if ($arreglo_plantas1) {
 
                                     foreach ($arreglo_plantas1 as $objeto_planta1) {
-                                        $especie = $objeto_planta1->especie;
+                                        $especie = $objeto_planta1->species;
                                        
 
                                 ?>

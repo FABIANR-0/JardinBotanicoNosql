@@ -11,21 +11,12 @@ class plantasEn_VI
     {
 
         require_once "models/plantas_MO.php";
-        require_once "models/estados_MO.php";
-        require_once "models/familias_MO.php";
-        require_once "models/habitos_MO.php";
-        require_once "models/origenes_MO.php";
+         
         $conexion = new conexion();
         $plantas_MO = new plantas_MO($conexion);
-        $familias_MO = new familias_MO($conexion);
-        $origenes_MO = new origenes_MO($conexion);
-        $habitos_MO = new habitos_MO($conexion);
-        $estados_MO = new estados_MO($conexion);
+        
         $arreglo_plantas = $plantas_MO->seleccionar();     
-        $arreglo_familias = $familias_MO->seleccionar();   
-        $arreglo_origenes = $origenes_MO->seleccionar();  
-        $arreglo_habitos = $habitos_MO->seleccionar();
-        $arreglo_estados = $estados_MO->seleccionar();
+        
 
 ?>
          
@@ -54,24 +45,14 @@ class plantasEn_VI
                             if ($arreglo_plantas) {
 
                                 foreach ($arreglo_plantas as $objeto_plantas) {
-                                    $cod_origen= $objeto_plantas->cod_origen;
-                                    $cod_estado= $objeto_plantas->cod_estado;
-                                    $cod_habito= $objeto_plantas->cod_habito;
-    
-                                    $arreglo_origen = $origenes_MO->seleccionar($cod_origen);
-                                    $objeto_origen = $arreglo_origen[0];
-                                    $nombre_origen = $objeto_origen->nombre_origen;
-                                    $arreglo_estado = $estados_MO->seleccionar($cod_estado);
-                                    $objeto_estado = $arreglo_estado[0];
-                                    $nombre_estado = $objeto_estado->nombre_estado;
-                                    $arreglo_habito = $habitos_MO->seleccionar($cod_habito);
-                                    $objeto_habito = $arreglo_habito[0];
-                                    $nombre_habito = $objeto_habito->nombre_habito;
-
-                                    $especie= $objeto_plantas->especie;
-                                    $familia = $objeto_plantas->nombre_familia;
-                                    $nombre_comun = $objeto_plantas->nombre_comun;
-                                    $stock = $objeto_plantas->stock;
+                                    $especie=$objeto_plantas['species'];
+                                    $especie1= str_replace('_',' ',$especie);
+                                    $nombre_origen=$objeto_plantas['origin_name'];
+                                    $nombre_estado=$objeto_plantas['state_name'];
+                                    $nombre_habito=$objeto_plantas['habit_name'];
+                                    $nombre_comun=$objeto_plantas['common_name'];
+                                    $stock=$objeto_plantas['stock']; 
+                                    $familia=$objeto_plantas['families']['family_name']; 
                                    
                             ?>
                                     <tr>

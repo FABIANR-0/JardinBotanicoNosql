@@ -31,11 +31,9 @@ class donacion_saliente_en_CO
 
       exit(json_encode($arreglo_respuesta));
     }
- 
- 
-    $donacion_en_MO->agregardonacion($id_donacion,$nit,$documento,$fecha);
-
- 
+    $arreglo=$donacion_en_MO->agregardonacion($id_donacion,$nit,$documento,$fecha);
+    
+   
     $arreglo_respuesta = [
       "estado" => "EXITO",
       "mensaje" => "Registro agregado"
@@ -159,11 +157,12 @@ class donacion_saliente_en_CO
     //print_r($datos);
     $id_donacion=$datos['id_donacion'];
 
-    $arreglo_detalle= $donacion_en_MO->seleccionarDetalle($id_donacion);
+   // $arreglo_detalle= $donacion_en_MO->seleccionarDetalle($id_donacion);
  
-    $donacion_en_MO->eliminardonaciondet($id_donacion);
-    $donacion_en_MO->eliminardonacion($id_donacion);
-    $eliminado = $conexion->filasAfectadas();
+   // $donacion_en_MO->eliminardonaciondet($id_donacion);
+
+    
+    $eliminado = $donacion_en_MO->eliminardonacion($id_donacion);
     if ($eliminado) {
   
       $mensaje = "Registro Eliminado";

@@ -55,14 +55,18 @@ class conexion
             printf($e->getMessage());
         }
     }
+   
     function consultar($consult,$collec)
     {
         if($collec=="coordinators"){
             $this->collection = $this->database ->coordinators; 
         }elseif($collec=="plants"){
             $this->collection = $this->database ->plants; 
+        }elseif($collec=="entities"){
+            $this->collection = $this->database ->entities; 
+        }elseif($collec=="donations"){
+            $this->collection = $this->database ->incoming_donations; 
         }
-       
         $this->resultado=$this->collection->find($consult);//find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'));
         //find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'))
     }
@@ -73,8 +77,11 @@ class conexion
             $this->collection = $this->database ->coordinators; 
         }elseif($collec=="plants"){
             $this->collection = $this->database ->plants; 
+        }elseif($collec=="entities"){
+            $this->collection = $this->database ->entities; 
+        }elseif($collec=="donations"){
+            $this->collection = $this->database ->incoming_donations; 
         }
-       
         $this->resultado=$this->collection->updateone($consult,$update);//find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'));
         //find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'))
     }
@@ -84,13 +91,37 @@ class conexion
             $this->collection = $this->database ->coordinators; 
         }elseif($collec=="plants"){
             $this->collection = $this->database ->plants; 
+        }elseif($collec=="entities"){
+            $this->collection = $this->database ->entities; 
+        }elseif($collec=="donations"){
+            $this->collection = $this->database ->incoming_donations; 
         }
-       
         $this->resultado=$this->collection->insertOne($consult);//find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'));
         //find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'))
     }
-    
-
+    function consultarDel($consult,$collec)
+    {
+        if($collec=="coordinators"){
+            $this->collection = $this->database ->coordinators; 
+        }elseif($collec=="plants"){
+            $this->collection = $this->database ->plants; 
+        }elseif($collec=="entities"){
+            $this->collection = $this->database ->entities; 
+        }elseif($collec=="donations"){
+            $this->collection = $this->database ->incoming_donations; 
+        }
+        $this->resultado=$this->collection->deleteOne($consult);//find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'));
+        //find(array('email'=>'frinconc@ufpso.edu.co','password'=>'1234'))
+    }
+    function consul_collection($collec){
+        if($collec=="coordinators"){
+            $this->collection = $this->database ->coordinators; 
+        }elseif($collec=="plants"){
+            $this->collection = $this->database ->plants; 
+        }elseif($collec=="entities"){
+            $this->collection = $this->database ->entities; 
+        }
+    }
     function extraerRegistro()
     {
         return $this->resultado;

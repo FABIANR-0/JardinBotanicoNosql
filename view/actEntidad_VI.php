@@ -12,14 +12,18 @@ class actEntidad_VI
         $conexion=new conexion();
         $entidad_MO=new entidad_MO($conexion);
         $arreglo=$entidad_MO->seleccionar($_SESSION['nit']);
+        foreach ($arreglo as $document) {
 
-        $objeto_entidad=$arreglo[0];
-        $nombre=$objeto_entidad->nombre_entidad;
-        $tipo=$objeto_entidad->tipo_entidad;
-        $telefono=$objeto_entidad->telefono;
-        $correo=$objeto_entidad->correo;
-        $contrasena=$objeto_entidad->contrasena;
-        $nit=$objeto_entidad->nit;
+            $nombre=$document['entity_name'];
+            $tipo=$document['entity_type'];
+            $telefono=$document['cellphone'];;
+            $correo=$document['email'];;
+            $contrasena=$document['password'];;
+            $nit=$document['nit'];;
+           
+  
+          }
+        
 
 ?>
         <div class="card">
@@ -36,8 +40,12 @@ class actEntidad_VI
                                     </div>
                                     <div class="form-group">
                                         <label for="apellidos">Tipo</label>
-                                        <input onkeypress="return sololetras(event)"  type="text" class="form-control" id="tipo" name="tipo"
-                                            value="<?php echo $tipo ?>">
+                                        <select class="form-control" name="tipo" id="tipo">
+                                            <option value="<?php echo $tipo ?>"><?php echo $tipo ?></option>
+                                            <option value="PRIVADA">PRIVADA</option>
+                                            <option value="PUBLICA">PUBLICA</option>
+                                        </select>
+                                         
                                     </div>
                                     
                                     <div class="form-group">

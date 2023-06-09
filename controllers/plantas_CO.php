@@ -107,13 +107,13 @@ class plantas_CO
  
     $especie = htmlentities($_POST['especie'], ENT_QUOTES);
     $familia = htmlentities($_POST['familia'], ENT_QUOTES);
-    $cod_origen = htmlentities($_POST['cod_origen'], ENT_QUOTES);
-    $cod_estado = htmlentities($_POST['cod_estado'], ENT_QUOTES);
-    $cod_habito = htmlentities($_POST['cod_habito'], ENT_QUOTES);
+    $origen = htmlentities($_POST['cod_origen'], ENT_QUOTES);
+    $estado = htmlentities($_POST['cod_estado'], ENT_QUOTES);
+    $habito = htmlentities($_POST['cod_habito'], ENT_QUOTES);
     $nombre_comun = htmlentities($_POST['nombre_comun'], ENT_QUOTES);
     $stock = htmlentities($_POST['stock'], ENT_QUOTES);
 
-    if (empty($familia)or empty($cod_origen) or empty($cod_estado) or empty($cod_habito)or empty($nombre_comun)or empty($stock) ) {
+    if (empty($familia)or empty($origen) or empty($estado) or empty($habito)or empty($nombre_comun)or empty($stock) ) {
       $arreglo_respuesta = [
         "estado" => "ERROR",
         "mensaje" => "Todos los campos son obligatorios"
@@ -150,9 +150,9 @@ class plantas_CO
         exit(json_encode($arreglo_respuesta));
       }
 
-    $plantas_MO->actualizarplantas($especie,$familia,$cod_estado,$cod_habito,$cod_origen,$nombre_comun, $stock);
+    
 
-    $actualizado = $conexion->filasAfectadas();
+    $actualizado = $plantas_MO->actualizarplantas($especie,$familia,$estado,$habito,$origen,$nombre_comun, $stock);
 
     if ($actualizado) {
 

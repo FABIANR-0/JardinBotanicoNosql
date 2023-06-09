@@ -9,8 +9,13 @@ class menuEn_VI
         $entidad_MO=new entidad_MO($conexion);
         $arreglo=$entidad_MO->seleccionar($_SESSION['nit']);
 
-        $objeto_entidad=$arreglo[0];
-        $nombres=$objeto_entidad->nombre_entidad;
+        foreach ($arreglo as $document) {
+
+          $nombres=$document['entity_name'];
+         
+
+        }
+       
         ?>
 
   <!DOCTYPE html>
@@ -87,7 +92,7 @@ class menuEn_VI
                     <li><a><i class="fa fa-list-alt"></i> Donaciones <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
                         <li><a onclick="verModulo('donacion_saliente_en_VI/agregardonacionsalienteen');" href="#">Salientes</a></li>
-                        <li><a  onclick="verModulo('donacion_entrante_en_VI/agregardonacionentranteen');" href="#">Entrantes</a></li>
+                        <!--li><a  onclick="verModulo('donacion_entrante_en_VI/agregardonacionentranteen');" href="#">Entrantes</a></li-->
                       </ul>
                     </li>
                      
@@ -118,7 +123,7 @@ class menuEn_VI
                 <ul class=" navbar-right">
                   <li class="nav-item dropdown open" style="padding-left: 15px;">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa  fa-briefcase"></i> 
+                    <i class="fa  fa-briefcase"></i> <?php echo $nombres ?>
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                       <a class="dropdown-item"  onclick="verModulo('actEntidad_VI/actualizarEntidad');"> Vizualizar/Editar datos</a>

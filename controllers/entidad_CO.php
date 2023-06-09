@@ -85,26 +85,60 @@ if (strlen($nombre) > 30) {
     exit(json_encode($arreglo_respuesta));
   }
 
-$arreglo_entidades = $entidades_MO->seleccionar_entidad($nit);
-if ($arreglo_entidades) {
-  $arreglo_respuesta = [
-    "estado" => "ERROR",
-    "mensaje" => "El nit de la entidad ($nit) esta duplicado"
+  $arreglo_entidades = $entidades_MO->seleccionar_entidad($nit);
+  foreach($arreglo_entidades as $doc_entidades){
+    if ($nit==$doc_entidades['nit']) {
+      $arreglo_respuesta = [
+        "estado" => "ERROR",
+        "mensaje" => "El nit de la entidad ($nit) esta duplicado"
 
-  ];
+      ];
 
-  exit(json_encode($arreglo_respuesta));
-}
-$arreglo_entidad_email = $entidades_MO->seleccionar_entidadem($correo);
-if ($arreglo_entidad_email) {
-  $arreglo_respuesta = [
-    "estado" => "ERROR",
-    "mensaje" => "El correo  ($correo) esta duplicado"
+      exit(json_encode($arreglo_respuesta));
+    }
+  }
 
-  ];
 
-  exit(json_encode($arreglo_respuesta));
-}
+  $arreglo_entidad_email = $entidades_MO->seleccionar_entidadem($correo);
+  foreach($arreglo_entidad_email as $doc_entidades_ema){
+    if ($correo==$doc_entidades_ema['email']) {
+      $arreglo_respuesta = [
+        "estado" => "ERROR",
+        "mensaje" => "El correo  ($correo) esta duplicado"
+
+      ];
+
+      exit(json_encode($arreglo_respuesta));
+    }
+  }
+  
+  $arreglo_entidad_nombre = $entidades_MO->seleccionar_entidadnom($nombre);
+  foreach($arreglo_entidad_nombre as $doc_entidades_nam){
+    if ($nombre==$doc_entidades_nam['entity_name']) 
+      {
+        $arreglo_respuesta = [
+          "estado" => "ERROR",
+          "mensaje" => "El nombre  ($nombre) esta duplicado"
+  
+        ];
+  
+        exit(json_encode($arreglo_respuesta));
+      }
+  }
+   
+  $arreglo_entidad_telefono = $entidades_MO->seleccionar_entidadte($telefono);
+  foreach($arreglo_entidad_telefono as $doc_entidades_tele){
+    if ($telefono==$doc_entidades_tele['cellphone']) {
+      $arreglo_respuesta = [
+        "estado" => "ERROR",
+        "mensaje" => "El telefono  ($telefono) esta duplicado"
+
+      ];
+
+      exit(json_encode($arreglo_respuesta));
+    }
+  }
+
 $entidades_MO->agregarentidades($nit,$nombre,$tipo,$telefono,$correo,$contrasena);
 /*$familia= $conexion->lastInsertId();*/
 $arreglo_respuesta = [

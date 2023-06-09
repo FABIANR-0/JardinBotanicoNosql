@@ -10,10 +10,18 @@ class donacion_saliente_en_MO
 
   function agregardonacion($id_donacion,$nit,$documento,$fecha)
   {
+    date_default_timezone_set('UTC');
+    date_default_timezone_set("America/Bogota");
+    $fecha1 = date('Y-m-d');
+                
+    $today = new \MongoDB\BSON\UTCDateTime(strtotime($fecha1) * 1000); 
+    
+    $Nsql=array('number'=>(int)$id_donacion,'date'=> $today,'observations'=>'EN PROCESO','total_plants'=>0,'state'=>1,'coordinator'=>$documento,'entity'=>$nit,'detail_incoming_donations'=>array());
 
-    $sql = "insert into donacion_entrante(id_donacion,nit,documento,fecha,observacion,total_plantas,estado) values ('$id_donacion','$nit','$documento','$fecha','EN PROCESO',0,default)";
+    $this->conexion->consultarIns($Nsql,'donations');
+    $arreglo = $this->conexion->extraerRegistro();
 
-    $this->conexion->consultar($sql);
+    return $arreglo;
   }
    
   function actualizarPlanta($especie, $cantidad){
@@ -21,13 +29,17 @@ class donacion_saliente_en_MO
 
     $this->conexion->consultar($sql);
 
+
   }
   
   
   function eliminardonacion($id_donacion){
-    $sql = "delete from donacion_entrante where id_donacion=$id_donacion";
+    $Nsql =array("number"=>(int)$id_donacion);
     
-    $this->conexion->consultar($sql);
+    $this->conexion->consultarDel($Nsql,"donations");
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
   }
 
   function eliminardonaciondet($id_donacion){
@@ -39,33 +51,32 @@ class donacion_saliente_en_MO
 
   function seleccionar($nit= '')
   {
-
     if (empty($nit)) {
 
-      $sql = "select * from donacion_entrante";
+      $Nsql = array();
     } else {
 
-      $sql = "select * from donacion_entrante where nit='$nit'";
+      $Nsql = array('entity'=>$nit);
     }
- 
-    $this->conexion->consultar($sql);
+
+    $this->conexion->consultar($Nsql,"donations");
 
     $arreglo = $this->conexion->extraerRegistro();
 
     return $arreglo;
+
   }
   function seleccionardc($documento= '')
   {
-
     if (empty($documento)) {
 
-      $sql = "select * from donacion_entrante";
+      $Nsql = array();
     } else {
 
-      $sql = "select * from donacion_entrante where documento='$documento'";
+      $Nsql = array('coordinator'=>$documento);
     }
- 
-    $this->conexion->consultar($sql);
+
+    $this->conexion->consultar($Nsql,"donations");
 
     $arreglo = $this->conexion->extraerRegistro();
 

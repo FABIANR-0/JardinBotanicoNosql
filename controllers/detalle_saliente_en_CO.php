@@ -34,15 +34,20 @@ class detalle_saliente_en_CO
     }
 
     $especie_repe=$detalle_en_MO->consulplan($id_donacion,$id_detalle,$especie);
-    if ($especie_repe) {
-     $arreglo_respuesta = [
-       "estado" => "ERROR",
-       "mensaje" => "esa planta ya esta registrada en el detalle, seleccione otra"
-   
-     ];
-   
-     exit(json_encode($arreglo_respuesta));
-   }
+    foreach($especie_repe as $especie_arr){
+      foreach($especie_arr['detail_incoming_donations'] as $especie_arr_repe){
+        if($especie==$especie_arr_repe['species']){
+          $arreglo_respuesta = [
+            "estado" => "ERROR",
+            "mensaje" => "esa planta ya esta registrada en el detalle, seleccione otra"
+        
+          ];
+        
+          exit(json_encode($arreglo_respuesta));
+          }
+      }
+    }
+     
     if ( empty($id_donacion) or empty($id_detalle) or empty($especie) or empty($cantidad) ) {
       $arreglo_respuesta = [
         "estado" => "ERROR",
@@ -147,10 +152,11 @@ class detalle_saliente_en_CO
     $cantidad=$datos['cantidad'];
     $especie=$datos['especie'];
 
-    $detalle_en_MO->eliminardetalle($id_donacion,$id_detalle);
-    $detalle_en_MO->restar_donacion($id_donacion,$cantidad);
+   
+    //$detalle_en_MO->restar_donacion($id_donacion,$cantidad);
  
-    $eliminado = $conexion->filasAfectadas();
+    $eliminado =  $detalle_en_MO->eliminardetalle($id_donacion,$id_detalle,$cantidad);
+    //print_r($eliminado);
     if ($eliminado) {
   
       $mensaje = "Registro Eliminado";
