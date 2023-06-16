@@ -97,13 +97,15 @@ class donacion_saliente_en_CO
     $donacion_en_MO->aceptar($id_donacion);
 
     $arreglo_detalle= $donacion_en_MO->seleccionarDetalle($id_donacion);
+
     if ($arreglo_detalle) {
 
       foreach ($arreglo_detalle as $objeto_detalle) {
-          $especie = $objeto_detalle->especie;
-          $cantidad = $objeto_detalle->cantidad;
-          $donacion_en_MO->actualizarPlanta($especie, $cantidad);
-        
+          foreach($objeto_detalle['detail_incoming_donations'] as $detalles){
+            $especie = $detalles['species'];
+            $cantidad = $detalles['amount_plants'];
+            $donacion_en_MO->actualizarPlanta($especie, $cantidad);
+          }
         }
       }
 
@@ -124,20 +126,14 @@ class donacion_saliente_en_CO
     //print_r($datos);
     $id_donacion=$datos['id_donacion'];
 
-    $arreglo_detalle= $donacion_en_MO->seleccionarDetalle($id_donacion);
     
      
     $donacion_en_MO->rechazar($id_donacion);
-    $eliminado = $conexion->filasAfectadas();
-    if ($eliminado) {
+    
   
       $mensaje = "Registro Eliminado";
       $estado = 'EXITO';
-    } else {
-
-      $mensaje = "No se realizaron cambios";
-      $estado = 'ADVERTENCIA';
-    }
+    
 
     $arreglo_respuesta = [
       "estado" => $estado,

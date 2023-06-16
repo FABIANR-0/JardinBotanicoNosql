@@ -133,17 +133,17 @@ class donacion_saliente_en_VI
                                             $planta = $objeto_detalle['species'];
                                             $total= $objeto_detalle['amount_plants'];?>
                                         <tr>
-                                            <td id="detalle_td_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
-                                            <td id="planta_td_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
-                                            <td style="text-align: center;" id="total_td_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
+                                            <td id="detalle_td_<?php echo $objeto_donacion['number'];?>_<?php echo $id_detalle; ?>"> <?php echo $id_detalle; ?> </td>
+                                            <td id="planta_td_<?php echo $objeto_donacion['number'];?>_<?php echo $id_detalle; ?>"> <?php echo $planta; ?> </td>
+                                            <td style="text-align: center;" id="total_td_<?php echo $objeto_donacion['number'];?>_<?php echo $id_detalle; ?>"> <?php echo $total; ?> </td>
                                             <?php 
                                               if($objeto_donacion['state']!=1 or $fechas1[0]-$fechas[0]>=1 or $fechas1[1]-$fechas[1]>=1 or $fechas1[2]-$fechas[2]>2){
 
                                               }else{?>
                                             <td style="text-align: center;">
-                                                <input type="hidden" id="especie_<?php echo $id_detalle; ?>" value="<?php echo $planta; ?>">
-                                                <input type="hidden" id="total_<?php echo $id_detalle; ?>" value="<?php echo $total; ?>">
-                                                <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal"   style="cursor: pointer;" onclick="verActualizardetalle('<?php echo $id_detalle; ?>','<?php echo $id_donacion; ?>')"></i>
+                                                <input type="hidden" id="especie_<?php echo $objeto_donacion['number'];?>_<?php echo $id_detalle; ?>" value="<?php echo $planta; ?>">
+                                                <input type="hidden" id="total_<?php echo $objeto_donacion['number'];?>_<?php echo $id_detalle; ?>" value="<?php echo $total; ?>">
+                                                <i class="fas fa-edit" data-toggle="modal" data-target="#Ventana_Modal"   style="cursor: pointer;" onclick="verActualizardetalle('<?php echo $id_detalle; ?>','<?php echo $objeto_donacion['number']; ?>')"></i>
                                             </td>
                                             <?php 
                                              }?>
@@ -608,10 +608,6 @@ class donacion_saliente_en_VI
                         if (respuesta.estado == 'EXITO') {
                             
                             let num = document.querySelector('#formulario_actualizar_donacion #id').value;
-                             
-                        
-                            
-                             
 
                             toastr.success(respuesta.mensaje);
 
@@ -631,8 +627,9 @@ class donacion_saliente_en_VI
             }
             function verActualizardetalle(id_detalle,id_donacion){
                 console.log(id_detalle);
-                let especie = document.querySelector('#especie_' +id_donacion+'_'+id_detalle).value;
-                let cantidad = document.querySelector('#total_' +id_donacion+'_'+id_detalle).value;
+                console.log(id_donacion);
+                let especie = document.querySelector('#especie_'+id_donacion+'_'+id_detalle).value;
+                let cantidad = document.querySelector('#total_'+id_donacion+'_'+id_detalle).value;
            
                 var cadena = `
                         <div class="card">

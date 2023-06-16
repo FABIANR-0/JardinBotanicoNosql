@@ -33,19 +33,33 @@ class detalle_saliente_en_MO
     $this->conexion->consultar($sql);
   }
 
-  function eliminardetalle($id_donacion,$id_detalle,$cantidad){
-    $val=$id_detalle-1;
-    $Nsql= array('number'=>(int)$id_donacion);
-    
+  function eliminardetalle($id_donacion,$id_detalle,$cantidad,$especie){
+    $Nsql= array('number'=>(int)$id_donacion,"detail_incoming_donations.species"=>$especie);
+    $this->conexion->consultar($Nsql,"donations");
 
-    $update=array('$unset'=>array("detail_incoming_donations.$val"=>1),'$inc'=>array('total_plants'=>-(int)$cantidad));
+    $arreglo = $this->conexion->extraerRegistro();
+    $pos=0;
+    foreach($arreglo as $document){
+      foreach( $document['detail_incoming_donations'] as $spec){
+        if($spec['species']==$especie){
+          break;
+        }
+        $pos++;
+      }
+    
+    }
+
+    //$val=$id_detalle-1;
+    $Nsql1= array('number'=>(int)$id_donacion);
+
+    $update=array('$unset'=>array("detail_incoming_donations.$pos"=>1),'$inc'=>array('total_plants'=>-(int)$cantidad));
     $update1=array('$pull'=>array('detail_incoming_donations'=>array('$in'=> [null])));
     
-    $this->conexion->consultarAct($Nsql,$update,"donations");
-    $this->conexion->consultarAct($Nsql,$update1,"donations");
-    $arreglo = $this->conexion->extraerRegistro();
+    $this->conexion->consultarAct($Nsql1,$update,"donations");
+    $this->conexion->consultarAct($Nsql1,$update1,"donations");
+    $arreglo1 = $this->conexion->extraerRegistro();
 
-    return $arreglo;
+    return $arreglo1;
   }
 
   function eliminardonacion($id_donacion){
@@ -67,10 +81,30 @@ class detalle_saliente_en_MO
 
   }
 
-  function actdetalle($id_donacion,$id_detalle,$especie,$cantidad){
-    $sql = "update detalle_donacion_entrante set especie='$especie',cantidad=$cantidad where id_donacion=$id_donacion and id_detalle_donacion='$id_detalle'";
+  function actdetalle($id_donacion,$id_detalle,$especieorg,$especie,$cantidad,$diferencia){
+    $Nsql= array('number'=>(int)$id_donacion,"detail_incoming_donations.species"=>$especieorg);
+    $this->conexion->consultar($Nsql,"donations");
 
-    $this->conexion->consultar($sql);
+    $arreglo = $this->conexion->extraerRegistro();
+    $pos=0;
+    foreach($arreglo as $document){
+      foreach( $document['detail_incoming_donations'] as $spec){
+        if($spec['species']==$especieorg){
+          break;
+        }
+        $pos++;
+      }
+    
+    }
+   
+    $update=array('$set'=>array("detail_incoming_donations.$pos.amount_plants"=>(int)$cantidad,"detail_incoming_donations.$pos.species"=>$especie),'$inc'=>array('total_plants'=>(int)$diferencia));
+   
+    $this->conexion->consultarAct($Nsql,$update,"donations");
+   
+    $arreglo = $this->conexion->extraerRegistro();
+
+    return $arreglo;
+  
   }
   function consulplan($id_donacion,$id_detalle,$especie){
     $Nsql = array('number'=>(int)$id_donacion);
